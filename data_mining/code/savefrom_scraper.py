@@ -38,9 +38,14 @@ class SaveFromScraper(object):
         pass
 
     def _get_html(self, video_id):
-        '''
-        Returns the html for the given url
-        '''
+        """
+        For a given video, returns the HTML for the download page
+
+        ARGS:
+            video_id: unique video identifier
+        RETURNS:
+            Tuple: whether page has loaded, and HTML for page
+        """
         url = 'https://www.ssyoutube.com/watch?v=' + video_id ## TODO: remove - this is only for testing
         self.browser.get(url)
 
