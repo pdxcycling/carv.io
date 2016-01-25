@@ -14,7 +14,7 @@ import pandas as pd
 ## TODO: The duration of the video is in ISO8601 format. Yay for standards!
 
 class YouTubeScraper(object):
-    DEVELOPER_KEY = "AIzaSyAVJTKFIbA9AY5PG5ZAPugd9Exmhj_hV6s"
+    DEVELOPER_KEY = ""
     YOUTUBE_API_SERVICE_NAME = "youtube"
     YOUTUBE_API_VERSION = "v3"
 
