@@ -14,7 +14,7 @@ from selenium.webdriver.common.utils import free_port
 
 class SaveFromScraper(object):
     """
-    Web scraper for savefromnet.com
+    Web scraper for savefrom.net
     """
 
     def __init__(self):
