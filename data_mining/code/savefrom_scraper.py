@@ -5,11 +5,16 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import Chrome
 from selenium.webdriver import PhantomJS
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.utils import free_port
 from bs4 import BeautifulSoup
 import urllib
 import urllib2
 import requests
-from selenium.webdriver.common.utils import free_port
+import pandas as pd
+import numpy as np
+from youtube_scraper import YouTubeScraper
+import time
+import random
 
 
 class SaveFromScraper(object):
@@ -109,3 +114,29 @@ class SaveFromScraper(object):
         """
         browser.close()
         browser.quit()
+
+
+if __name__ == "__main__":
+    # Read youtube results from a pickled dataframe
+    yt_df = pd.read_pickle('total_sports.pkl')
+
+    # Instantiate scraper
+    save_scraper = SaveFromScraper()
+
+    # Grab videos for the
+    start_index = 434
+    end_index = 500
+    for video_id, rc in zip(yt_df[yt_df['ratingCount'] > 50]['id'][start_index:end_index],
+                            yt_df[yt_df['ratingCount'] > 50]['ratingCount'][start_index:end_index]):
+        has_loaded, html = save_scraper._get_html(video_id)
+        if has_loaded:
+            try:
+                links = save_scraper._parse_html(html)
+                dl_url = links['360p']
+                time.sleep(1)
+                save_scraper._download_file(video_id=video_id, download_url=dl_url)
+                time.sleep(5 + random.randint(2, 5))
+            except:
+                pass
+        else:
+            print "Page failed to load"
