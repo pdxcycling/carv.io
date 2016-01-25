@@ -9,27 +9,32 @@ from bs4 import BeautifulSoup
 import urllib
 import urllib2
 import requests
+from selenium.webdriver.common.utils import free_port
+
 
 class SaveFromScraper(object):
-    '''
-    Scrape from savefromnet.com
-    '''
+    """
+    Web scraper for savefromnet.com
+    """
 
     def __init__(self):
-        '''
+        """
         Default constructor
-        '''
-        from selenium.webdriver.common.utils import free_port
-        self.browser = PhantomJS(executable_path='/Users/fiannacci/data_science_class/project_exploration/web_scraping/drivers/phantomjs',
+
+        ARGS:
+            None
+        RETURNS:
+            None
+        """
+        self.browser = PhantomJS(executable_path='./drivers/phantomjs',
                                  port=free_port())  # Optional argument, if not specified will search path.
-        #self.browser = Chrome('/Users/fiannacci/data_science_class/project_exploration/web_scraping/drivers/chromedriver')  # Optional argument, if not specified will search path.
         self.timeout = 5 # seconds
 
     def get_video(self, video_id, url, quality):
-        '''
+        """
         Main function that does heavy lifting
-        '''
-        ## Select video quality in this function.
+        Select video quality in this function.
+        """
         pass
 
     def _get_html(self, video_id):
