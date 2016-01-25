@@ -14,66 +14,70 @@ import pandas as pd
 ## TODO: The duration of the video is in ISO8601 format. Yay for standards!
 
 class YouTubeScraper(object):
+    """
+    Scraper for YouTube data
+    """
     DEVELOPER_KEY = ""
     YOUTUBE_API_SERVICE_NAME = "youtube"
     YOUTUBE_API_VERSION = "v3"
 
     def __init__(self):
-        '''
+        """
         Constructor
-        '''
-        self.youtube = build( YouTubeScraper.YOUTUBE_API_SERVICE_NAME,
-                              YouTubeScraper.YOUTUBE_API_VERSION,
-                              developerKey=YouTubeScraper.DEVELOPER_KEY
-                            )
+        """
+        self.youtube = build(YouTubeScraper.YOUTUBE_API_SERVICE_NAME,
+                             YouTubeScraper.YOUTUBE_API_VERSION,
+                             developerKey=YouTubeScraper.DEVELOPER_KEY)
 
     def search(self, query, max_results=500):
-        '''
-        Run search query
-        '''
-        #query = 'gopro,snowboarding'
-        query = query
+        """
+        Run search query on YouTube videos
+
+        ARGS:
+            query: string containing what to search for
+            max_results:
+        RETURNS:
+            List of videos matching search criteria
+        """
         num_results = 0
         result_list = []
         next_page_token = None
         while num_results < max_results:
             print "Retrieving results " + str(num_results+1) + " to " + str(num_results + 50)
             print "from " + str(next_page_token)
+            # Grab next page of results if it exists
             if next_page_token:
                 results = self.youtube.search().list(
                                     type='video',
                                     part="id,snippet",
-                                    q=query,   ## query term(s)
+                                    q=query,
                                     videoDuration='short',
-                                    videoLicense='any', ## can set this to creative commons should i want...
+                                    videoLicense='any',
                                     order='viewCount',
-                                    pageToken=next_page_token, ## Only when it exists...
+                                    pageToken=next_page_token,
                                     maxResults='50'
                                   ).execute()
             else:
                 results = self.youtube.search().list(
                                     type='video',
                                     part="id,snippet",
-                                    q=query,   ## query term(s)
+                                    q=query,
                                     videoDuration='short',
-                                    videoLicense='any', ## can set this to creative commons should i want...
+                                    videoLicense='any',
                                     order='viewCount',
                                     maxResults='50'
                                   ).execute()
-            ## Parse/Store the results
+            # Parse/Store the results
             result_list.append(results.copy())
-            ## Get next page
+            # Get next page
             num_results += results['pageInfo']['resultsPerPage']
             if 'nextPageToken' in results:
                 next_page_token = results['nextPageToken']
             else:
                 break
 
-        ## Note: the nextPageToken in the results can be used to retrieve the next page of results
         return result_list
-        ## Then look up the comments, likes, dislikes for each of the returned pages
 
-    # Call the API's commentThreads.list method to list the existing comments.
     def get_comment_threads(self, youtube, video_id):
         '''
         Based on Google API's Python example
