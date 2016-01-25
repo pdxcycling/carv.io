@@ -117,7 +117,7 @@ class SaveFromScraper(object):
 
 
 if __name__ == "__main__":
-    # Read youtube results from a pickled dataframe
+    # Read video search results from a pickled dataframe
     yt_df = pd.read_pickle('total_sports.pkl')
 
     # Instantiate scraper
