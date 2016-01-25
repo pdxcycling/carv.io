@@ -55,15 +55,20 @@ class SaveFromScraper(object):
 
         if has_loaded:
             html = self.browser.page_source
-            #print html
         else:
             html = ""
 
         return (has_loaded, html)
 
     def _parse_html(self, html):
-        '''
-        '''
+        """
+        Find the links for downloading the video in the HTML
+
+        ARGS:
+            html: web page source
+        RETURNS:
+            Dictionary containing all links for downloading the video
+        """
         link_dict = dict()
         soup = BeautifulSoup(html, 'html.parser')
         for link in soup.findAll("a", { "class" : "link-download" }):
@@ -76,18 +81,26 @@ class SaveFromScraper(object):
         return link_dict
 
     def _download_file(self, video_id, download_url):
-        '''
+        """
+        Download video file from SaveFromNet
 
-        video_id : String of
-        Returns nothing
-        '''
+        ARGS:
+            video_id: unique video identifier
+        RETURNS:
+            None
+        """
         f = urllib2.urlopen(download_url)
         with open(video_id + ".mp4", "wb") as code:
             code.write(f.read())
 
     def quit(self):
-        '''
-        Probably don't want browser to quit every time, but for testing purposes...
-        '''
+        """
+        Quit browser session
+
+        ARGS:
+            None
+        RETURNS:
+            None
+        """
         browser.close()
         browser.quit()
